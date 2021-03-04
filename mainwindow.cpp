@@ -395,7 +395,7 @@ void MainWindow::on_btn_back_clicked()
         return;
     }
     text.resize(text.size() - 1);
-    if (text == ""){
+    if (text == "" || text == "-"){
         text = "0";
     }
     ui->lineEdit->setText(text);
