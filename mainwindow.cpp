@@ -294,6 +294,22 @@ QString MainWindow::divide_digit(){
     return "";
 }
 
+QString rework_restext(QString restext){
+    if (restext.contains('.')){
+        for (int i = restext.length() - 1; i > 0; --i){
+            if (restext[i] == '0'){
+                restext.resize(restext.length() - 1);
+            } else if ((i == restext.length() - 1) && (restext[i] == '.')){
+                restext.resize(restext.length() - 1);
+                break;
+            } else {
+                break;
+            }
+        }
+    }
+    return restext;
+}
+
 void MainWindow::on_btn_equal_clicked()
 {
     if (select == 0){
@@ -317,7 +333,7 @@ void MainWindow::on_btn_equal_clicked()
     if (select == 3){
         //restext = multiply_digit();
         result = digit_1 * digit_2;
-        restext = QString::number(result, 'f');
+        restext = QString::number(result, 'f', 12);
         sign = "*";
     }
     if (select == 4){
@@ -327,7 +343,7 @@ void MainWindow::on_btn_equal_clicked()
             return;
         }
         result = digit_1 / digit_2;
-        restext = QString::number(result, 'f');
+        restext = QString::number(result, 'f', 12);
     }
     /* Вывод результата */
     QString d1, d2, str;
@@ -338,29 +354,23 @@ void MainWindow::on_btn_equal_clicked()
             for (int i = 0; i < digit1_dot_shift; ++i){
                 d1 += "0";
             }
-            d1 += QString::number(digit1_dot);
+            d1 += QString::number(abs(digit1_dot));
         }
-        d2.setNum(digit2_main);
+        d2.setNum(abs(digit2_main));
         if  (digit2_dot != 0){
             d2 += ".";
             for (int i = 0; i < digit2_dot_shift; ++i){
                 d2 += "0";
             }
-            d2 += QString::number(digit2_dot);
+            d2 += QString::number(abs(digit2_dot));
         }
     } else {
-        d1.setNum(digit_1);
-        d2.setNum(digit_2);
+        d1 = QString::number(digit_1, 'f', 12);
+        d2 = QString::number(digit_2, 'f', 12);
     }
-
-    for (int i = restext.length() - 1; i > 0; --i){
-        if (restext[i] == '0'){
-            restext.resize(restext.length() - 1);
-        } else if ((i == restext.length() - 1) && (restext[i] == '.')){
-            restext.resize(restext.length() - 1);
-            break;
-        }
-    }
+    restext = rework_restext(restext);
+    d1 = rework_restext(d1);
+    d2 = rework_restext(d2);
 
     ui->tips->setText(d1 + " " + sign + " " + d2);
     ui->lineEdit->setText(restext);
