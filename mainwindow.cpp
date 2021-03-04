@@ -51,6 +51,7 @@ void MainWindow::setNumber(QString num){
 void MainWindow::setSign(QString sign){
     if (!isChanged){
         get_digit(ui->lineEdit->text(), 1);
+        digit_1 = ui->lineEdit->text().toDouble();
         ui->tips->setText(ui->lineEdit->text() + " " + sign + " ");
         ui->lineEdit->setText("0");
         isChanged = true;
@@ -258,7 +259,7 @@ QString MainWindow::sum_digit(int select = 0)
     return text;
 }
 
-QString MainWindow::multiply_digit()
+QString MainWindow::multiply_digit() // Нерабочая функция, но имеет потенциал
 {
     long long int digit_main;
     long long int digit_dot, digit_dot_shift;
@@ -299,6 +300,8 @@ void MainWindow::on_btn_equal_clicked()
         return;
     }
     get_digit(ui->lineEdit->text(), 2);
+    digit_2 = ui->lineEdit->text().toDouble();
+    double result = 0;
     QString sign = "";
     QString restext = "";
 
@@ -312,7 +315,9 @@ void MainWindow::on_btn_equal_clicked()
 
     }
     if (select == 3){
-        restext = multiply_digit();
+        //restext = multiply_digit();
+        result = digit_1 * digit_2;
+        restext = QString::number(result, 'f');
         sign = "*";
     }
     if (select == 4){
@@ -321,68 +326,46 @@ void MainWindow::on_btn_equal_clicked()
             ui->lineEdit->setText("Error");
             return;
         }
-//        result = digit_1 / digit_2;
+        result = digit_1 / digit_2;
+        restext = QString::number(result, 'f');
     }
+    /* Вывод результата */
     QString d1, d2, str;
-    d1.setNum(digit1_main);
-    if  (digit1_dot != 0){
-        d1 += ".";
-        for (int i = 0; i < digit1_dot_shift; ++i){
-            d1 += "0";
+    if ((sign == "+") || (sign == "-")){
+        d1.setNum(digit1_main);
+        if  (digit1_dot != 0){
+            d1 += ".";
+            for (int i = 0; i < digit1_dot_shift; ++i){
+                d1 += "0";
+            }
+            d1 += QString::number(digit1_dot);
         }
-        d1 += QString::number(digit1_dot);
-    }
-    d2.setNum(digit2_main);
-    if  (digit2_dot != 0){
-        d2 += ".";
-        for (int i = 0; i < digit2_dot_shift; ++i){
-            d2 += "0";
+        d2.setNum(digit2_main);
+        if  (digit2_dot != 0){
+            d2 += ".";
+            for (int i = 0; i < digit2_dot_shift; ++i){
+                d2 += "0";
+            }
+            d2 += QString::number(digit2_dot);
         }
-        d2 += QString::number(digit2_dot);
+    } else {
+        d1.setNum(digit_1);
+        d2.setNum(digit_2);
     }
-    ui->tips->setText(d1 + " " + sign + " " + d2);
 
+    for (int i = restext.length() - 1; i > 0; --i){
+        if (restext[i] == '0'){
+            restext.resize(restext.length() - 1);
+        } else if ((i == restext.length() - 1) && (restext[i] == '.')){
+            restext.resize(restext.length() - 1);
+            break;
+        }
+    }
+
+    ui->tips->setText(d1 + " " + sign + " " + d2);
     ui->lineEdit->setText(restext);
     select = 0;
 }
-
-//void MainWindow::on_btn_equal_clicked()
-//{
-//    if (select == 0){
-//        return;
-//    }
-//    digit_2 = ui->lineEdit->text().toDouble();
-//    QString sign = "";
-//    double result = 0;
-//    if (select == 1){
-//        result = digit_1 + digit_2;
-//        sign = "+";
-//    }
-//    if (select == 2){
-//        result = digit_1 - digit_2;
-//        sign = "-";
-//    }
-//    if (select == 3){
-//        result = digit_1 * digit_2;
-//        sign = "*";
-//    }
-//    if (select == 4){
-//        sign = "/";
-//        if (digit_2 == 0){
-//            ui->lineEdit->setText("Error");
-//            return;
-//        }
-//        result = digit_1 / digit_2;
-//    }
-//    QString d1, d2, str;
-//    d1.setNum(digit_1);
-//    d2.setNum(digit_2);
-//    ui->tips->setText(d1 + " " + sign + " " + d2);
-
-//    str.setNum(result);
-//    ui->lineEdit->setText(QString::number(result));
-//    select = 0;
-//}
 
 void MainWindow::on_btn_dot_clicked()
 {
