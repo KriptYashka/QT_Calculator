@@ -6,24 +6,27 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>362</width>
-    <height>284</height>
+    <width>366</width>
+    <height>321</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>362</width>
-    <height>284</height>
+    <width>366</width>
+    <height>321</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>362</width>
-    <height>284</height>
+    <width>366</width>
+    <height>321</height>
    </size>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="windowOpacity">
+   <double>1.000000000000000</double>
   </property>
   <property name="animated">
    <bool>true</bool>
@@ -59,7 +62,7 @@
         <string>0</string>
        </property>
        <property name="maxLength">
-        <number>11</number>
+        <number>12</number>
        </property>
        <property name="cursorPosition">
         <number>1</number>
@@ -208,8 +211,8 @@
        </property>
        <property name="text">
         <string>Внимание: 
-Максимальный размер числа - 11 символов (включая точку)
-Слишком малые числа будут округлятся до 9 знака после запятой</string>
+Максимальный размер числа - 12 символов (включая точку и минус)
+После запятой макс. 9 знаков.</string>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
@@ -230,8 +233,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>362</width>
-     <height>25</height>
+     <width>366</width>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

@@ -41,8 +41,25 @@ bool isChanged = false;
 void MainWindow::setNumber(QString num){
     isChanged = false;
     QString text = ui->lineEdit->text();
+    bool flag_dot = false;
+    int after_dot = 0;
+    int before_dot = 0;
+    for (int i = 0; i < text.length(); ++i){
+        if (flag_dot){
+            after_dot++;
+        }
+        if (!flag_dot && text[i].isDigit()){
+            before_dot++;
+        }
+        if (text[i] == '.'){
+            flag_dot = true;
+        }
+    }
     if (text == "0" || text == "Error"){
         ui->lineEdit->setText(num);
+        return;
+    }
+    if (after_dot >= 9 || ((!flag_dot) && before_dot >= 9)){
         return;
     }
     ui->lineEdit->setText(text + num);
@@ -70,7 +87,8 @@ void MainWindow::on_btn_0_clicked()
     }
     if (text == "Error")
         ui->lineEdit->setText("");
-    ui->lineEdit->setText(text + "0");
+    //ui->lineEdit->setText(text + "0");
+    setNumber("0");
 }
 
 void MainWindow::on_btn_1_clicked()
