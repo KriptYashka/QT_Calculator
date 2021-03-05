@@ -254,7 +254,7 @@ QString MainWindow::sum_digit(int select = 0)
         for (int i = 0; i < digit_dot_shift; ++i){
             text += "0";
         }
-        text += QString::number(digit_dot);
+        text += QString::number(abs(digit_dot));
     }
     return text;
 }
@@ -333,20 +333,21 @@ void MainWindow::on_btn_equal_clicked()
     if (select == 3){
         //restext = multiply_digit();
         result = digit_1 * digit_2;
-        restext = QString::number(result, 'f', 12);
+        restext = QString::number(result, 'f', 9);
         sign = "*";
     }
     if (select == 4){
         sign = "/";
         if (digit2_main == 0 && digit2_dot == 0){
             ui->lineEdit->setText("Error");
+            ui->tips->setText("Деление на нуль");
             return;
         }
         result = digit_1 / digit_2;
-        restext = QString::number(result, 'f', 12);
+        restext = QString::number(result, 'f', 9);
     }
     /* Вывод результата */
-    QString d1, d2, str;
+    QString d1, d2;
     if ((sign == "+") || (sign == "-")){
         d1.setNum(digit1_main);
         if  (digit1_dot != 0){
@@ -365,8 +366,8 @@ void MainWindow::on_btn_equal_clicked()
             d2 += QString::number(abs(digit2_dot));
         }
     } else {
-        d1 = QString::number(digit_1, 'f', 12);
-        d2 = QString::number(digit_2, 'f', 12);
+        d1 = QString::number(digit_1, 'f', 9);
+        d2 = QString::number(digit_2, 'f', 9);
     }
     restext = rework_restext(restext);
     d1 = rework_restext(d1);
