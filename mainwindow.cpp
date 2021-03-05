@@ -15,22 +15,23 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+/* Для умножения и деления */
 double digit_1 = 0;
 double digit_2 = 0;
 
-int digit1_sign = 1;
-int digit1_main = 0;
-int digit1_dot = 0;
-int digit1_dot_shift = 0;
+/* Для суммы и разности */
+int digit1_main = 0; // число до запятой
+int digit1_dot = 0; // число после запятой ( без ведущих нулей )
+int digit1_dot_shift = 0; // свдиг числа после запятой или просто количество ведущих нулей
 
-int digit2_sign = 1;
 int digit2_main = 0;
 int digit2_dot = 0;
 int digit2_dot_shift = 0;
 
-int select = 0;
-bool isChanged = false;
+int select = 0; // выбор арифметического действия
+bool isChanged = false; // флаг, обозначающий, был ли изменен арифметический знак на другой
 /*
+SELECT
 0 - ничего
 1 - сумма
 2 - разность
@@ -39,6 +40,7 @@ bool isChanged = false;
 */
 
 void MainWindow::disableBtn(bool flag){
+    /* Делает рабочими/нерабочими кнопки арифметических действий */
     ui->btn_plus->setDisabled(flag);
     ui->btn_minus->setDisabled(flag);
     ui->btn_multiply->setDisabled(flag);
@@ -46,11 +48,12 @@ void MainWindow::disableBtn(bool flag){
 }
 
 void MainWindow::setNumber(QString num){
-    isChanged = false;
+    /* Добавляет новую цифру к числу */
+    isChanged = false; // флаг, обозначающий, был ли изменен арифметический знак на другой
     QString text = ui->lineEdit->text();
-    bool flag_dot = false;
-    int after_dot = 0;
-    int before_dot = 0;
+    bool flag_dot = false; // есть ли точка в числе
+    int after_dot = 0; // чисел после точки
+    int before_dot = 0; // чисел до точки
 
     /* Несколько слагаемых */
     if (select != 0){
@@ -81,6 +84,7 @@ void MainWindow::setNumber(QString num){
 }
 
 void MainWindow::setSign(QString sign){
+    /* Устанавливает арифметическое действие над числами */
     if (!isChanged){
         get_digit(ui->lineEdit->text(), 1);
         digit_1 = ui->lineEdit->text().toDouble();
@@ -94,8 +98,7 @@ void MainWindow::setSign(QString sign){
     }
 }
 
-void MainWindow::on_btn_0_clicked()
-{
+void MainWindow::on_btn_0_clicked() {
     QString text = ui->lineEdit->text();
     if (text == "0"){
         return;
@@ -106,77 +109,64 @@ void MainWindow::on_btn_0_clicked()
     setNumber("0");
 }
 
-void MainWindow::on_btn_1_clicked()
-{
+void MainWindow::on_btn_1_clicked() {
     setNumber("1");
 }
 
-void MainWindow::on_btn_2_clicked()
-{
+void MainWindow::on_btn_2_clicked() {
     setNumber("2");
 }
 
-void MainWindow::on_btn_3_clicked()
-{
+void MainWindow::on_btn_3_clicked() {
     setNumber("3");
 }
 
-void MainWindow::on_btn_4_clicked()
-{
+void MainWindow::on_btn_4_clicked() {
     setNumber("4");
 }
 
-void MainWindow::on_btn_5_clicked()
-{
+void MainWindow::on_btn_5_clicked() {
     setNumber("5");
 }
 
-void MainWindow::on_btn_6_clicked()
-{
+void MainWindow::on_btn_6_clicked() {
     setNumber("6");
 }
 
-void MainWindow::on_btn_7_clicked()
-{
+void MainWindow::on_btn_7_clicked() {
     setNumber("7");
 }
 
-void MainWindow::on_btn_8_clicked()
-{
+void MainWindow::on_btn_8_clicked() {
     setNumber("8");
 }
 
-void MainWindow::on_btn_9_clicked()
-{
+void MainWindow::on_btn_9_clicked() {
     setNumber("9");
 }
 
-void MainWindow::on_btn_plus_clicked()
-{
+void MainWindow::on_btn_plus_clicked() {
     select = 1;
     setSign("+");
 }
 
-void MainWindow::on_btn_minus_clicked()
-{
+void MainWindow::on_btn_minus_clicked() {
     select = 2;
     setSign("-");
 }
 
-void MainWindow::on_btn_multiply_clicked()
-{
+void MainWindow::on_btn_multiply_clicked() {
     select = 3;
     setSign("*");
 }
 
-void MainWindow::on_btn_div_clicked()
-{
+void MainWindow::on_btn_div_clicked() {
     select = 4;
     setSign("/");
 }
 
-void MainWindow::get_digit(QString str, int select_digit)
-{
+void MainWindow::get_digit(QString str, int select_digit) {
+    /* "Расфасовывает" число на: целую часть, дробную часть, свдиг дробной части от точки */
     int position_dot = str.indexOf(".");
     int *digit_main, *digit_dot, *digit_dot_shift;
     if (select_digit == 1){
@@ -219,6 +209,7 @@ void MainWindow::get_digit(QString str, int select_digit)
 }
 
 int len_int(long long int a){
+    /* Подсчет количества цифр */
     int k = 0;
     while (a != 0){
         k++;
@@ -239,18 +230,14 @@ int min(int a, int b){
     return b;
 }
 
-QString MainWindow::sum_digit(int select = 0)
-{
+QString MainWindow::sum_digit(int select = 0) {
+    /* Суммирование двух чисел с высокой точностью */
     if (select == 1){
         digit2_main *= -1;
         digit2_dot *= -1;
     }
     int digit_main = digit1_main + digit2_main;
     int digit_dot, digit_dot_shift;
-    //int delta_shift = abs(digit1_dot_shift - digit2_dot_shift);
-    //int delta_len = abs(len_int(digit1_dot) - len_int(digit2_dot));
-    //int multi = pow(10, abs(delta_shift - delta_len));
-
 
     int multi = pow(10, abs(digit1_dot_shift + len_int(digit1_dot) - digit2_dot_shift - len_int(digit2_dot)));
 
@@ -274,7 +261,7 @@ QString MainWindow::sum_digit(int select = 0)
         digit_dot_shift = abs((-1 * len_before * digit_dot_shift) - len_int(digit_dot));
     }
 
-    while (digit_dot % 10 == 0 && digit_dot != 0){
+    while (digit_dot % 10 == 0 && digit_dot != 0){ // удаление незначащих нулей
         digit_dot /= 10;
     }
 
@@ -290,6 +277,7 @@ QString MainWindow::sum_digit(int select = 0)
 }
 
 QString rework_restext(QString restext){
+    /* Удаление незначащих нулей в строке + удаление точки, если нет дробной части */
     if (restext.contains('.')){
         for (int i = restext.length() - 1; i > 0; --i){
             if (restext[i] == '0'){
@@ -306,6 +294,7 @@ QString rework_restext(QString restext){
 }
 
 double set_main_size(double res){
+    /* Ограничивает целую часть до 8 символов */
     int count = 0;
     int c = (int)res;
     while (c != 0){
@@ -317,8 +306,8 @@ double set_main_size(double res){
     return res;
 }
 
-void MainWindow::on_btn_equal_clicked()
-{
+void MainWindow::on_btn_equal_clicked(){
+    /* Вычисление результата */
     if (select == 0){
         return;
     }
@@ -341,10 +330,9 @@ void MainWindow::on_btn_equal_clicked()
 
     }
     if (select == 3){
-        //restext = multiply_digit();
         double result2 = digit_1 * digit_2;
         result = set_main_size(result2);
-        if (result2 != result){
+        if (result2 != result){ // Если результат выходит за гранницы допустимых значений ( до 8 знаков )
             overflow = true;
         }
         restext = QString::number(result, 'f', 9);
@@ -352,21 +340,21 @@ void MainWindow::on_btn_equal_clicked()
     }
     if (select == 4){
         sign = "/";
-        if (digit2_main == 0 && digit2_dot == 0){
+        if (digit2_main == 0 && digit2_dot == 0){ // проверка деления на нуль
             ui->lineEdit->setText("Error");
             ui->tips->setText("Деление на нуль");
             return;
         }
         double result2 = digit_1 / digit_2;
         result = set_main_size(result2);
-        if (result2 != result){
+        if (result2 != result){ // Если результат выходит за гранницы допустимых значений ( до 8 знаков )
             overflow = true;
         }
         restext = QString::number(result, 'f', 9);
     }
     /* Вывод результата */
     QString d1, d2;
-    if ((sign == "+") || (sign == "-")){
+    if ((sign == "+") || (sign == "-")){ // для точных чисел
         d1.setNum(digit1_main);
         if  (digit1_dot != 0){
             d1 += ".";
@@ -383,7 +371,7 @@ void MainWindow::on_btn_equal_clicked()
             }
             d2 += QString::number(abs(digit2_dot));
         }
-    } else {
+    } else { // для обычных чисел при умножении, делении
         d1 = QString::number(digit_1, 'f', 9);
         d2 = QString::number(digit_2, 'f', 9);
     }
@@ -421,6 +409,7 @@ void MainWindow::on_btn_clear_clicked()
 
 void MainWindow::on_btn_back_clicked()
 {
+    /* Стирание одного знака */
     QString text = ui->lineEdit->text();
     if (text == "0" || text == "Error" || text == "0." || text == "-0."){
         ui->lineEdit->setText("0");
@@ -439,6 +428,7 @@ void MainWindow::on_btn_back_clicked()
 
 void MainWindow::on_btn_sign_clicked()
 {
+    /* Меняет знак числа */
     QString text = ui->lineEdit->text();
     if (text == "Error" || text == "0" || text == "0.")
         return;
