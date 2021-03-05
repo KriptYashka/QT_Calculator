@@ -38,6 +38,13 @@ bool isChanged = false;
 4 - деление
 */
 
+void MainWindow::disableBtn(bool flag){
+    ui->btn_plus->setDisabled(flag);
+    ui->btn_minus->setDisabled(flag);
+    ui->btn_multiply->setDisabled(flag);
+    ui->btn_div->setDisabled(flag);
+}
+
 void MainWindow::setNumber(QString num){
     isChanged = false;
     QString text = ui->lineEdit->text();
@@ -47,15 +54,9 @@ void MainWindow::setNumber(QString num){
 
     /* Несколько слагаемых */
     if (select != 0){
-        ui->btn_plus->setDisabled(true);
-        ui->btn_minus->setDisabled(true);
-        ui->btn_multiply->setDisabled(true);
-        ui->btn_div->setDisabled(true);
+       disableBtn(true);
     } else {
-        ui->btn_plus->setDisabled(false);
-        ui->btn_minus->setDisabled(false);
-        ui->btn_multiply->setDisabled(false);
-        ui->btn_div->setDisabled(false);
+       disableBtn(false);
     }
 
     for (int i = 0; i < text.length(); ++i){
@@ -259,16 +260,13 @@ QString MainWindow::sum_digit(int select = 0)
     if (digit1_dot_shift + len_int(digit1_dot) > digit2_dot_shift + len_int(digit2_dot)){
         // Если общая длина digit1 больше
         digit_dot = digit1_dot + digit2_dot * multi;
-        int len_after = len_int(digit_dot);
-        digit_dot_shift = min(digit1_dot_shift, digit2_dot_shift) - abs(len_before - len_after);
-        digit_dot_shift = len_general - len_after;
     } else {
         // Если общая длина digit2 больше
         digit_dot = digit2_dot + digit1_dot * multi;
-        int len_after = len_int(digit_dot);
-        digit_dot_shift = min(digit1_dot_shift, digit2_dot_shift) - abs(len_before - len_after);
-        digit_dot_shift = len_general - len_after;
     }
+    int len_after = len_int(digit_dot);
+    digit_dot_shift = min(digit1_dot_shift, digit2_dot_shift) - abs(len_before - len_after);
+    digit_dot_shift = len_general - len_after;
 
     if (digit_dot_shift < 0){
         digit_main += digit_dot / pow(10, -1 * len_before * digit_dot_shift);
@@ -289,41 +287,6 @@ QString MainWindow::sum_digit(int select = 0)
         text += QString::number(abs(digit_dot));
     }
     return text;
-}
-
-QString MainWindow::multiply_digit() // Нерабочая функция, но имеет потенциал
-{
-    long long int digit_main;
-    long long int digit_dot, digit_dot_shift;
-
-    long long int max_len_dot = pow(10, max(len_int(digit1_dot) + digit1_dot_shift, len_int(digit2_dot) + digit2_dot_shift));
-
-    long long int digit1 = max_len_dot * digit1_main + digit1_dot;
-    long long int digit2 = max_len_dot * digit2_main + digit2_dot;
-    long long int result = digit1 * digit2;
-    long long int divide = (long long int)pow(max_len_dot, 2);
-    digit_main = result / max_len_dot / max_len_dot;
-    digit_dot = result % divide;
-
-    digit_dot_shift = (len_int(divide) - 1) - len_int(digit_dot);
-
-    while (digit_dot % 10 == 0 && digit_dot != 0){
-        digit_dot /= 10;
-    }
-
-    QString text = QString::number(digit_main);
-    if  (digit_dot != 0){
-        text += ".";
-        for (int i = 0; i < digit_dot_shift; ++i){
-            text += "0";
-        }
-        text += QString::number(digit_dot);
-    }
-    return text;
-}
-
-QString MainWindow::divide_digit(){
-    return "";
 }
 
 QString rework_restext(QString restext){
@@ -366,10 +329,7 @@ void MainWindow::on_btn_equal_clicked()
     QString restext = "";
     bool overflow = false;
 
-    ui->btn_plus->setDisabled(false);
-    ui->btn_minus->setDisabled(false);
-    ui->btn_multiply->setDisabled(false);
-    ui->btn_div->setDisabled(false);
+    disableBtn(false);
 
     if (select == 1){
         restext = sum_digit();
@@ -464,20 +424,14 @@ void MainWindow::on_btn_back_clicked()
     QString text = ui->lineEdit->text();
     if (text == "0" || text == "Error" || text == "0." || text == "-0."){
         ui->lineEdit->setText("0");
-        ui->btn_plus->setDisabled(false);
-        ui->btn_minus->setDisabled(false);
-        ui->btn_multiply->setDisabled(false);
-        ui->btn_div->setDisabled(false);
+        disableBtn(false);
         return;
     }
     text.resize(text.size() - 1);
     if (text == "" || text == "-"){
         text = "0";
         //isChanged = true;
-        ui->btn_plus->setDisabled(false);
-        ui->btn_minus->setDisabled(false);
-        ui->btn_multiply->setDisabled(false);
-        ui->btn_div->setDisabled(false);
+        disableBtn(false);
     }
     ui->lineEdit->setText(text);
 

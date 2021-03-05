@@ -20,8 +20,6 @@ private slots:
     void setSign(QString num);
     void get_digit(QString str, int select_digit);
     QString sum_digit(int select);
-    QString multiply_digit();
-    QString divide_digit();
 
     void on_btn_0_clicked();
     void on_btn_1_clicked();
@@ -51,6 +49,8 @@ private slots:
     void on_btn_back_clicked();
 
     void on_btn_sign_clicked();
+
+    void disableBtn(bool flag);
 
 private:
     Ui::MainWindow *ui;
