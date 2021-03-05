@@ -35,7 +35,7 @@
       <x>0</x>
       <y>0</y>
       <width>351</width>
-      <height>226</height>
+      <height>242</height>
      </rect>
     </property>
     <layout class="QGridLayout" name="gridLayout">
@@ -208,7 +208,8 @@
        </property>
        <property name="text">
         <string>Внимание: 
-Максимальный размер числа - 11 символов (включая точку)</string>
+Максимальный размер числа - 11 символов (включая точку)
+Слишком малые числа будут округлятся до 9 знака после запятой</string>
        </property>
        <property name="scaledContents">
         <bool>false</bool>
