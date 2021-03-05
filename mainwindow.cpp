@@ -44,6 +44,20 @@ void MainWindow::setNumber(QString num){
     bool flag_dot = false;
     int after_dot = 0;
     int before_dot = 0;
+
+    /* Несколько слагаемых */
+    if (select != 0){
+        ui->btn_plus->setDisabled(true);
+        ui->btn_minus->setDisabled(true);
+        ui->btn_multiply->setDisabled(true);
+        ui->btn_div->setDisabled(true);
+    } else {
+        ui->btn_plus->setDisabled(false);
+        ui->btn_minus->setDisabled(false);
+        ui->btn_multiply->setDisabled(false);
+        ui->btn_div->setDisabled(false);
+    }
+
     for (int i = 0; i < text.length(); ++i){
         if (flag_dot){
             after_dot++;
@@ -59,7 +73,7 @@ void MainWindow::setNumber(QString num){
         ui->lineEdit->setText(num);
         return;
     }
-    if (after_dot >= 9 || ((!flag_dot) && before_dot >= 9)){
+    if (after_dot >= 9 || ((!flag_dot) && before_dot >= 8)){
         return;
     }
     ui->lineEdit->setText(text + num);
@@ -328,6 +342,18 @@ QString rework_restext(QString restext){
     return restext;
 }
 
+double set_main_size(double res){
+    int count = 0;
+    int c = (int)res;
+    while (c != 0){
+        c /= 10;
+        count++;
+    }
+    if (count > 8)
+        res /= pow(10, count - 8);
+    return res;
+}
+
 void MainWindow::on_btn_equal_clicked()
 {
     if (select == 0){
@@ -338,6 +364,12 @@ void MainWindow::on_btn_equal_clicked()
     double result = 0;
     QString sign = "";
     QString restext = "";
+    bool overflow = false;
+
+    ui->btn_plus->setDisabled(false);
+    ui->btn_minus->setDisabled(false);
+    ui->btn_multiply->setDisabled(false);
+    ui->btn_div->setDisabled(false);
 
     if (select == 1){
         restext = sum_digit();
@@ -350,7 +382,11 @@ void MainWindow::on_btn_equal_clicked()
     }
     if (select == 3){
         //restext = multiply_digit();
-        result = digit_1 * digit_2;
+        double result2 = digit_1 * digit_2;
+        result = set_main_size(result2);
+        if (result2 != result){
+            overflow = true;
+        }
         restext = QString::number(result, 'f', 9);
         sign = "*";
     }
@@ -361,7 +397,11 @@ void MainWindow::on_btn_equal_clicked()
             ui->tips->setText("Деление на нуль");
             return;
         }
-        result = digit_1 / digit_2;
+        double result2 = digit_1 / digit_2;
+        result = set_main_size(result2);
+        if (result2 != result){
+            overflow = true;
+        }
         restext = QString::number(result, 'f', 9);
     }
     /* Вывод результата */
@@ -390,8 +430,11 @@ void MainWindow::on_btn_equal_clicked()
     restext = rework_restext(restext);
     d1 = rework_restext(d1);
     d2 = rework_restext(d2);
-
-    ui->tips->setText(d1 + " " + sign + " " + d2);
+    if (overflow) {
+        ui->tips->setText(d1 + " " + sign + " " + d2 + "\nЧисло превысило лимит знаков.");
+    } else {
+        ui->tips->setText(d1 + " " + sign + " " + d2);
+    }
     ui->lineEdit->setText(restext);
     select = 0;
 }
@@ -421,11 +464,20 @@ void MainWindow::on_btn_back_clicked()
     QString text = ui->lineEdit->text();
     if (text == "0" || text == "Error" || text == "0." || text == "-0."){
         ui->lineEdit->setText("0");
+        ui->btn_plus->setDisabled(false);
+        ui->btn_minus->setDisabled(false);
+        ui->btn_multiply->setDisabled(false);
+        ui->btn_div->setDisabled(false);
         return;
     }
     text.resize(text.size() - 1);
     if (text == "" || text == "-"){
         text = "0";
+        //isChanged = true;
+        ui->btn_plus->setDisabled(false);
+        ui->btn_minus->setDisabled(false);
+        ui->btn_multiply->setDisabled(false);
+        ui->btn_div->setDisabled(false);
     }
     ui->lineEdit->setText(text);
 
