@@ -39,15 +39,15 @@ SELECT
 4 - деление
 */
 
-void MainWindow::disableBtn(bool flag){
+void MainWindow::disable_btn(bool flag){
     /* Делает рабочими/нерабочими кнопки арифметических действий */
     ui->btn_plus->setDisabled(flag);
     ui->btn_minus->setDisabled(flag);
     ui->btn_multiply->setDisabled(flag);
-    ui->btn_div->setDisabled(flag);
+    ui->btn_divide->setDisabled(flag);
 }
 
-void MainWindow::setNumber(QString num){
+void MainWindow::set_number(QString num){
     /* Добавляет новую цифру к числу */
     isChanged = false; // флаг, обозначающий, был ли изменен арифметический знак на другой
     QString text = ui->lineEdit->text();
@@ -57,9 +57,9 @@ void MainWindow::setNumber(QString num){
 
     /* Несколько слагаемых */
     if (select != 0){
-       disableBtn(true);
+       disable_btn(true);
     } else {
-       disableBtn(false);
+       disable_btn(false);
     }
 
     for (int i = 0; i < text.length(); ++i){
@@ -106,43 +106,43 @@ void MainWindow::on_btn_0_clicked() {
     if (text == "Error")
         ui->lineEdit->setText("");
     //ui->lineEdit->setText(text + "0");
-    setNumber("0");
+    set_number("0");
 }
 
 void MainWindow::on_btn_1_clicked() {
-    setNumber("1");
+    set_number("1");
 }
 
 void MainWindow::on_btn_2_clicked() {
-    setNumber("2");
+    set_number("2");
 }
 
 void MainWindow::on_btn_3_clicked() {
-    setNumber("3");
+    set_number("3");
 }
 
 void MainWindow::on_btn_4_clicked() {
-    setNumber("4");
+    set_number("4");
 }
 
 void MainWindow::on_btn_5_clicked() {
-    setNumber("5");
+    set_number("5");
 }
 
 void MainWindow::on_btn_6_clicked() {
-    setNumber("6");
+    set_number("6");
 }
 
 void MainWindow::on_btn_7_clicked() {
-    setNumber("7");
+    set_number("7");
 }
 
 void MainWindow::on_btn_8_clicked() {
-    setNumber("8");
+    set_number("8");
 }
 
 void MainWindow::on_btn_9_clicked() {
-    setNumber("9");
+    set_number("9");
 }
 
 void MainWindow::on_btn_plus_clicked() {
@@ -160,7 +160,7 @@ void MainWindow::on_btn_multiply_clicked() {
     setSign("*");
 }
 
-void MainWindow::on_btn_div_clicked() {
+void MainWindow::on_btn_divide_clicked() {
     select = 4;
     setSign("/");
 }
@@ -318,7 +318,7 @@ void MainWindow::on_btn_equal_clicked(){
     QString restext = "";
     bool overflow = false;
 
-    disableBtn(false);
+    disable_btn(false);
 
     if (select == 1){
         restext = sum_digit();
@@ -413,14 +413,14 @@ void MainWindow::on_btn_back_clicked()
     QString text = ui->lineEdit->text();
     if (text == "0" || text == "Error" || text == "0." || text == "-0."){
         ui->lineEdit->setText("0");
-        disableBtn(false);
+        disable_btn(false);
         return;
     }
     text.resize(text.size() - 1);
     if (text == "" || text == "-"){
         text = "0";
         //isChanged = true;
-        disableBtn(false);
+        disable_btn(false);
     }
     ui->lineEdit->setText(text);
 

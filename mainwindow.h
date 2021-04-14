@@ -16,7 +16,7 @@ public:
     ~MainWindow();
 
 private slots:
-    void setNumber(QString num);
+    void set_number(QString num);
     void setSign(QString num);
     void get_digit(QString str, int select_digit);
     QString sum_digit(int select);
@@ -33,24 +33,17 @@ private slots:
     void on_btn_9_clicked();
 
     void on_btn_plus_clicked();
-
     void on_btn_minus_clicked();
-
     void on_btn_multiply_clicked();
-
-    void on_btn_div_clicked();
-
+    void on_btn_divide_clicked();
     void on_btn_equal_clicked();
-
     void on_btn_dot_clicked();
 
     void on_btn_clear_clicked();
-
     void on_btn_back_clicked();
-
     void on_btn_sign_clicked();
 
-    void disableBtn(bool flag);
+    void disable_btn(bool flag);
 
 private:
     Ui::MainWindow *ui;

@@ -111,7 +111,7 @@
       </widget>
      </item>
      <item row="8" column="4">
-      <widget class="QPushButton" name="btn_div">
+      <widget class="QPushButton" name="btn_divide">
        <property name="text">
         <string>/</string>
        </property>
@@ -233,7 +233,7 @@
      <x>0</x>
      <y>0</y>
      <width>366</width>
-     <height>25</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
