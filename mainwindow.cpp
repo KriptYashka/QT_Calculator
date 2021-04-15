@@ -105,7 +105,6 @@ void MainWindow::on_btn_0_clicked() {
     }
     if (text == "Error")
         ui->lineEdit->setText("");
-    //ui->lineEdit->setText(text + "0");
     set_number("0");
 }
 
